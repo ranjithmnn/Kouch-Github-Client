@@ -8,11 +8,28 @@
 import SwiftUI
 
 struct DashboardView: View {
-//    let apiKey = Bundle.main.object(forInfoDictionaryKey: "GITHUB_API_KEY") as? String
+    @StateObject private var profileVm = ProfileViewModel()
+    @StateObject private var issuesVm = IssueViewModel()
     var body: some View {
-//        Text(apiKey ?? "None")
+        NavigationStack {
+            VStack {
+                if let user = profileVm.user {
+                    GreetingsView(user: user)
+                }
+                if let issues = issuesVm.issues {
+                    IssuesListView(issues: issues)
+                }
+                Spacer()
+            }
+            .onAppear {
+                profileVm.fetchUser()
+                issuesVm.fetchIssues()
+            }
+        }
     }
 }
+
+
 
 #Preview {
     DashboardView()
