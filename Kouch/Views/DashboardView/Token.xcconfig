@@ -1,0 +1,12 @@
+//
+//  Token.xcconfig
+//  Kouch
+//
+//  Created by Ranjith Menon on 06/04/2026.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+
+GITHUB_API_KEY = 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
