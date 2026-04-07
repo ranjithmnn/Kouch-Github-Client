@@ -30,7 +30,7 @@ struct ProfileView: View {
                 .padding(.top)
 
                 HStack(spacing: 0) {
-                    StatMetric(value: "\(user.public_repos ?? 0)", label: "Repos")
+                    StatMetric(value: "\((user.public_repos ?? 0) + (user.total_private_repos ?? 0))", label: "Repos")
                     Divider().frame(height: 30)
                     StatMetric(value: "\(user.followers ?? 0)", label: "Followers")
                     Divider().frame(height: 30)
@@ -68,20 +68,6 @@ struct ProfileView: View {
                 .cornerRadius(16)
                 .padding(.horizontal)
                 
-                if user.total_private_repos ?? 0 > 0 {
-                    HStack {
-                        Label("Private Repositories", systemImage: "lock.shield")
-                            .font(.footnote.bold())
-                        Spacer()
-                        Text("\(user.total_private_repos ?? 0)")
-                            .font(.footnote.monospacedDigit())
-                    }
-                    .padding()
-                    .background(Color.orange.opacity(0.1))
-                    .foregroundStyle(.orange)
-                    .cornerRadius(12)
-                    .padding(.horizontal)
-                }
             }
             .padding(.bottom, 30)
         }

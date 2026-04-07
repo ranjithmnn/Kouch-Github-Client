@@ -10,11 +10,13 @@ import Foundation
 enum APIEndpoint {
     case user
     case issues
+    case userRepos
 
     var path: String {
         switch self {
         case .user: return "/user"
         case .issues: return "/issues"
+        case .userRepos: return "/user/repos"
         }
     }
 

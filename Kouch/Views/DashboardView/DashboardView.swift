@@ -91,7 +91,7 @@ struct DashboardView: View {
                             .font(.headline)
                             .padding(.horizontal)
                         
-                        NavigationLink(destination: Text("Repositories List")) {
+                        NavigationLink(destination: RepositoryList()) {
                             Label("Repositories", systemImage: "folder")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding()
