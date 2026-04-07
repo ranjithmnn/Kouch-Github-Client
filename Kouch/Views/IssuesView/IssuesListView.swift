@@ -10,20 +10,16 @@ import SwiftUI
 struct IssuesListView: View {
     let issues: [Issue]
     var body: some View {
-        ForEach(issues.indices, id: \.self) { index in
-            IssueTileView(issue: issues[index])
-        }
-    }
-}
-
-struct IssueTileView: View {
-    let issue: Issue
-    var body: some View {
-        HStack {
-            VStack {
-                Text(issue.title ?? "")
+        ScrollView {
+            ForEach(Array(issues), id: \.number) { issue in
+                NavigationLink(destination: IssueDetailView(issue: issue)) {
+                    IssueTileView(issue: issue) // Your improved tile
+                }
+                .buttonStyle(.plain)
             }
         }
+        .navigationTitle("Issues")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
