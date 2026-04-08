@@ -20,16 +20,27 @@ struct DashboardView: View {
                         HStack {
                             GreetingsView(user: user)
                             Spacer()
-
-                            Button {
-                                
+                            Menu {
+                                Button {
+                                } label: {
+                                    Label("New Issue", systemImage: "circle.circle")
+                                }
+                                Button {
+                                } label: {
+                                    Label("Create Pull Request", systemImage: "arrow.trianglehead.pull")
+                                }
+                                Divider()
+                                Button {
+                                } label: {
+                                    Label("New Repository", systemImage: "plus")
+                                }
                             } label: {
                                 Image(systemName: "plus")
                             }
                             .buttonBorderShape(.circle)
                             .buttonStyle(.glass)
-                                
-
+                            
+                            
                             NavigationLink {
                                 ProfileView(user: profileVm.user ?? User())
                             } label: {
@@ -42,17 +53,17 @@ struct DashboardView: View {
                                 .clipShape(Circle())
                                 .padding(.trailing)
                             }
-
+                            
                         }
                     }
-
+                    
                     // 2. Metrics Grid (Info Rich)
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                         MetricCard(title: "Assigned Issues", value: "\(issuesVm.issues?.count ?? 0)", icon: "at", color: .blue)
                         MetricCard(title: "Open PRs", value: "0", icon: "arrow.triangle.pull", color: .purple) // Placeholder for now
                     }
                     .padding(.horizontal)
-
+                    
                     // 3. Recent Issues Section (Minimal)
                     VStack(alignment: .leading) {
                         HStack {
@@ -66,7 +77,7 @@ struct DashboardView: View {
                             .foregroundStyle(.blue)
                         }
                         .padding(.horizontal)
-
+                        
                         VStack(spacing: 0) {
                             if let issues = issuesVm.issues?.prefix(3) {
                                 ForEach(Array(issues), id: \.number) { issue in
@@ -102,6 +113,10 @@ struct DashboardView: View {
                     }
                 }
                 .padding(.vertical)
+            }
+            .refreshable {
+                profileVm.fetchUser()
+                issuesVm.fetchIssues()
             }
             .onAppear {
                 profileVm.fetchUser()

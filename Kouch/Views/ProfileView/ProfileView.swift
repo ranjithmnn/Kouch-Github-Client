@@ -77,8 +77,8 @@ struct ProfileView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Settings", systemImage: "gear") {
-                    
+                NavigationLink(destination: Text("Settings")) {
+                    Image(systemName: "gear")
                 }
             }
         }

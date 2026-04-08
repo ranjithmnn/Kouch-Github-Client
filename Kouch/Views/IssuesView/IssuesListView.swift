@@ -11,6 +11,7 @@ struct IssuesListView: View {
     @StateObject private var issuesVm = IssueViewModel()
     @State private var searchText = ""
     let issues: [Issue]
+    
     var body: some View {
         ScrollView {
             ForEach(Array(issues), id: \.number) { issue in
