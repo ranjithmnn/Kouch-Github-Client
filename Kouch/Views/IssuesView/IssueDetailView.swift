@@ -90,6 +90,12 @@ struct IssueDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .toolbar {
+//            ToolbarItem(placement: .primaryAction) {
+//                Button { /* Action */ } label: {
+//                    Image(systemName: "sparkles")
+//                }
+//            }
+//            ToolbarSpacer(.fixed)
             ToolbarItem(placement: .primaryAction) {
                 Button { /* Action */ } label: {
                     Image(systemName: "square.and.arrow.up")
