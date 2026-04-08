@@ -48,8 +48,18 @@ struct IssueTileView: View {
             }
             
             HStack(spacing: 12) {
-                // Author
-                Label(issue.user?.login ?? "", systemImage: "person.circle")
+                AsyncImage(url: URL(string: issue.user?.avatar_url ?? "")) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Color.gray
+                }
+                .frame(width: 20, height: 20)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 1.5))
+                
+                Text(issue.user?.login ?? "")
                 
                 // Comments
                 if let commentCount = issue.comments, commentCount > 0 {
