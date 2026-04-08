@@ -92,7 +92,7 @@ struct IssueDetailView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button { /* Action */ } label: {
-                    Image(systemName: "ellipsis.circle")
+                    Image(systemName: "square.and.arrow.up")
                 }
             }
         }

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct IssuesListView: View {
+    @StateObject private var issuesVm = IssueViewModel()
+    @State private var searchText = ""
     let issues: [Issue]
     var body: some View {
         ScrollView {
@@ -20,6 +22,10 @@ struct IssuesListView: View {
         }
         .navigationTitle("Issues")
         .navigationBarTitleDisplayMode(.inline)
+        .searchable(text: $searchText, prompt: "Search your issues")
+        .refreshable {
+            issuesVm.fetchIssues()
+        }
     }
 }
 

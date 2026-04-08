@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-struct Repository: Codable, Identifiable {
-    var id: Int
-    var name: String?
-    var full_name: String?
-    var owner: User?
-    var language: String?
-    var description: String?
-    var updated_at: String?
-    var stargazers_count: Int?
+struct Repository: Codable {
+    let name: String?
+    let full_name: String?
+    let owner: User?
+    let description: String?
+    let language: String?
+    let stargazers_count: Int?
+    let forks_count: Int?
+    let visibility: String?
+    let updated_at: String?
 }

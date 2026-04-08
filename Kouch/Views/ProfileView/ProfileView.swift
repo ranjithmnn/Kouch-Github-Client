@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @StateObject private var profileVm = ProfileViewModel()
     let user: User
     
     var body: some View {
@@ -81,6 +82,9 @@ struct ProfileView: View {
                 }
             }
         }
+        .refreshable {
+            profileVm.fetchUser()
+        }
     }
     
     private func formatJoinedDate(_ dateStr: String?) -> String {
@@ -117,7 +121,7 @@ struct InfoRow: View {
         if let actualValue = value, !actualValue.isEmpty {
             HStack(spacing: 12) {
                 Image(systemName: icon)
-                    .foregroundStyle(.background)
+                    .foregroundStyle(.foreground)
                     .frame(width: 24)
                 
                 Text(label)

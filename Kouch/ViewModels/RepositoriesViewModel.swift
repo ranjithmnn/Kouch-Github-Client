@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class RepositoriesViewModel: ObservableObject {
-    @Published var repo: [Repository]?
+    @Published var repos: [Repository]?
     @Published var isLoading = false
     @Published var error: String?
     
@@ -17,7 +17,7 @@ class RepositoriesViewModel: ObservableObject {
     
     func fetchUser() {
         
-        if (repo != nil) {
+        if (repos != nil) {
             return
         }
         
@@ -28,7 +28,7 @@ class RepositoriesViewModel: ObservableObject {
                 
                 switch result {
                 case .success(let repo):
-                    self?.repo = repo
+                    self?.repos = repo
                     
                 case .failure(let error):
                     self?.error = error.localizedDescription
