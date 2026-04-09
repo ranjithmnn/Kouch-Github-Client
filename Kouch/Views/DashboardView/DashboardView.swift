@@ -7,122 +7,246 @@
 
 import SwiftUI
 
+
+enum DashboardAction: String, Identifiable {
+    case newIssue = "New Issue"
+    case createPR = "Create Pull Request"
+    case newRepo = "New Repository"
+    
+    var id: String { self.rawValue }
+    var icon: String {
+        switch self {
+        case .newIssue: return "circle.circle"
+        case .createPR: return "arrow.trianglehead.pull"
+        case .newRepo: return "plus"
+        }
+    }
+}
+
 struct DashboardView: View {
     @StateObject private var profileVm = ProfileViewModel()
     @StateObject private var issuesVm = IssueViewModel()
+    
+    // State for the sheet
+    @State private var selectedAction: DashboardAction?
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    // 1. Header Section
-                    if let user = profileVm.user {
-                        HStack {
-                            GreetingsView(user: user)
-                            Spacer()
-                            Menu {
-                                Button {
-                                } label: {
-                                    Label("New Issue", systemImage: "circle.circle")
-                                }
-                                Button {
-                                } label: {
-                                    Label("Create Pull Request", systemImage: "arrow.trianglehead.pull")
-                                }
-                                Divider()
-                                Button {
-                                } label: {
-                                    Label("New Repository", systemImage: "plus")
-                                }
-                            } label: {
-                                Image(systemName: "plus")
-                            }
-                            .buttonBorderShape(.circle)
-                            .buttonStyle(.glass)
-                            
-                            
-                            NavigationLink {
-                                ProfileView(user: profileVm.user ?? User())
-                            } label: {
-                                AsyncImage(url: URL(string: user.avatar_url ?? "")) { img in
-                                    img.resizable().aspectRatio(contentMode: .fill)
-                                } placeholder: {
-                                    Circle().fill(.gray.opacity(0.3))
-                                }
-                                .frame(width: 44, height: 44)
-                                .clipShape(Circle())
-                                .padding(.trailing)
-                            }
-                            
-                        }
-                    }
-                    
-                    // 2. Metrics Grid (Info Rich)
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                        MetricCard(title: "Assigned Issues", value: "\(issuesVm.issues?.count ?? 0)", icon: "at", color: .blue)
-                        MetricCard(title: "Open PRs", value: "0", icon: "arrow.triangle.pull", color: .purple) // Placeholder for now
-                    }
-                    .padding(.horizontal)
-                    
-                    // 3. Recent Issues Section (Minimal)
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("Recent Issues")
-                                .font(.headline)
-                            Spacer()
-                            NavigationLink("See All") {
-                                IssuesListView(issues: issuesVm.issues ?? []) // Dedicated View
-                            }
-                            .font(.subheadline)
-                            .foregroundStyle(.blue)
-                        }
-                        .padding(.horizontal)
-                        
-                        VStack(spacing: 0) {
-                            if let issues = issuesVm.issues?.prefix(3) {
-                                ForEach(Array(issues), id: \.number) { issue in
-                                    NavigationLink(destination: IssueDetailView(issue: issue)) {
-                                        IssueTileView(issue: issue) // Your improved tile
-                                    }
-                                    .buttonStyle(.plain)
-                                    Divider().padding(.leading)
-                                }
-                            } else {
-                                ContentUnavailableView("No Issues", systemImage: "circle.circle")
-                            }
-                        }
-                        .background(Color(.secondarySystemGroupedBackground))
-                        .cornerRadius(12)
-                        .padding(.horizontal)
-                    }
-                    
-                    // 4. Quick Links / Categories
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Explore")
-                            .font(.headline)
-                            .padding(.horizontal)
-                        
-                        NavigationLink(destination: RepositoryList()) {
-                            Label("Repositories", systemImage: "folder")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding()
-                                .background(Color(.secondarySystemGroupedBackground))
-                                .cornerRadius(12)
-                        }
-                        .padding(.horizontal)
-                    }
+                    headerSection
+                    metricsGrid
+                    recentIssuesSection
+                    exploreSection
                 }
                 .padding(.vertical)
             }
+            .background(Color(.systemGroupedBackground))
             .refreshable {
-                profileVm.fetchUser()
-                issuesVm.fetchIssues()
+                refreshData()
             }
             .onAppear {
-                profileVm.fetchUser()
-                issuesVm.fetchIssues()
+                refreshData()
+            }
+            // Sheet presentation
+            .sheet(item: $selectedAction) { action in
+                ActionDetailSheet(actionName: action.rawValue)
             }
         }
+    }
+    
+    private func refreshData() {
+        profileVm.fetchUser()
+        issuesVm.fetchIssues()
+    }
+}
+
+private extension DashboardView {
+    
+    var headerSection: some View {
+        Group {
+            if let user = profileVm.user {
+                HStack(spacing: 16) {
+                    GreetingsView(user: user)
+                    
+                    Spacer()
+                    
+                    // Reusable Menu
+                    MenuButtons(selectedAction: $selectedAction)
+                    
+                    NavigationLink(destination: ProfileView(user: user)) {
+                        UserAvatarView(url: user.avatar_url)
+                    }
+                }
+                .padding(.horizontal)
+            }
+        }
+    }
+    
+    var metricsGrid: some View {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+            MetricCard(title: "Assigned Issues", value: "\(issuesVm.issues?.count ?? 0)", icon: "at", color: .blue)
+            MetricCard(title: "Open PRs", value: "0", icon: "arrow.triangle.pull", color: .purple)
+        }
+        .padding(.horizontal)
+    }
+    
+    var recentIssuesSection: some View {
+        Group {
+            if let issues = issuesVm.issues, !issues.isEmpty {
+                VStack(alignment: .leading) {
+                    SectionHeader(title: "Recent Issues", linkText: "See All") {
+                        IssuesListView(issues: issues)
+                    }
+                    
+                    VStack(spacing: 0) {
+                        ForEach(Array(issues.prefix(3)), id: \.number) { issue in
+                            NavigationLink(destination: IssueDetailView(issue: issue)) {
+                                IssueTileView(issue: issue)
+                            }
+                            .buttonStyle(.plain)
+                            if issue.number != issues.prefix(3).last?.number {
+                                Divider().padding(.leading)
+                            }
+                        }
+                    }
+                    .modifier(RoundedContainerModifier())
+                }
+            }
+        }
+    }
+    
+    var exploreSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Explore")
+                .font(.headline)
+                .padding(.leading)
+            
+            VStack(spacing: 0) {
+                NavigationRow(title: "Repositories", icon: "folder", destination: RepositoryList())
+                Divider().padding(.leading, 44)
+                NavigationRow(title: "Projects", icon: "p.square", destination: Text("Projects"))
+            }
+            .modifier(RoundedContainerModifier())
+        }
+    }
+}
+
+
+struct MenuButtons: View {
+    @Binding var selectedAction: DashboardAction?
+    
+    var body: some View {
+        Menu {
+            MenuButton(action: .newIssue, selection: $selectedAction)
+            MenuButton(action: .createPR, selection: $selectedAction)
+            Divider()
+            MenuButton(action: .newRepo, selection: $selectedAction)
+        } label: {
+            Image(systemName: "plus")
+                .font(.system(size: 16, weight: .bold))
+                .frame(width: 44, height: 44)
+                .background(Circle().fill(.ultraThinMaterial))
+                .overlay(Circle().stroke(Color.primary.opacity(0.1), lineWidth: 0.5))
+                
+        }
+    }
+}
+
+struct MenuButton: View {
+    let action: DashboardAction
+    @Binding var selection: DashboardAction?
+    
+    var body: some View {
+        Button {
+            selection = action
+        } label: {
+            Label(action.rawValue, systemImage: action.icon)
+        }
+    }
+}
+
+struct NavigationRow<Destination: View>: View {
+    let title: String
+    let icon: String
+    let destination: Destination
+    
+    var body: some View {
+        NavigationLink(destination: destination) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .foregroundStyle(.blue)
+                    .frame(width: 24)
+                Text(title)
+                    .foregroundStyle(.primary)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+        }
+    }
+}
+
+struct SectionHeader<Destination: View>: View {
+    let title: String
+    let linkText: String
+    let destination: () -> Destination
+    
+    var body: some View {
+        HStack {
+            Text(title).font(.headline)
+            Spacer()
+            NavigationLink(linkText, destination: destination)
+                .font(.subheadline)
+                .foregroundStyle(.blue)
+        }
+        .padding(.horizontal)
+    }
+}
+
+struct UserAvatarView: View {
+    let url: String?
+    
+    var body: some View {
+        AsyncImage(url: URL(string: url ?? "")) { img in
+            img.resizable().aspectRatio(contentMode: .fill)
+        } placeholder: {
+            Circle().fill(.gray.opacity(0.3))
+        }
+        .frame(width: 44, height: 44)
+        .clipShape(Circle())
+    }
+}
+
+struct ActionDetailSheet: View {
+    let actionName: String
+    @Environment(\.dismiss) var dismiss
+    
+    var body: some View {
+        NavigationStack {
+            VStack {
+                Text("Content for \(actionName)")
+                    .font(.title3)
+            }
+            .navigationTitle(actionName)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
+struct RoundedContainerModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .background(Color(.secondarySystemGroupedBackground))
+            .cornerRadius(12)
+            .padding(.horizontal)
     }
 }
 
