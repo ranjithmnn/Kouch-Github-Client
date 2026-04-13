@@ -10,20 +10,26 @@ import SwiftUI
 struct IssuesListView: View {
     @StateObject private var issuesVm = IssueViewModel()
     @State private var searchText = ""
-    let issues: [Issue]
     
     var body: some View {
         ScrollView {
-            ForEach(Array(issues), id: \.number) { issue in
-                NavigationLink(destination: IssueDetailView(issue: issue)) {
-                    IssueTileView(issue: issue) // Your improved tile
+            if issuesVm.isLoading {
+                ProgressView("Fetching Issues...")
+            } else {
+                ForEach(issuesVm.issues ?? [], id: \.number) { issue in
+                    NavigationLink(destination: IssueDetailView(issue: issue)) {
+                        IssueTileView(issue: issue) // Your improved tile
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
             }
         }
         .navigationTitle("Issues")
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchText, prompt: "Search your issues")
+        .onAppear {
+            issuesVm.fetchIssues()
+        }
         .refreshable {
             issuesVm.fetchIssues()
         }

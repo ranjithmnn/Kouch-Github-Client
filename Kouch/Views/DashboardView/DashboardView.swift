@@ -26,6 +26,7 @@ enum DashboardAction: String, Identifiable {
 struct DashboardView: View {
     @StateObject private var profileVm = ProfileViewModel()
     @StateObject private var issuesVm = IssueViewModel()
+    @StateObject private var reposVm = RepositoriesViewModel()
     
     // State for the sheet
     @State private var selectedAction: DashboardAction?
@@ -58,6 +59,7 @@ struct DashboardView: View {
     private func refreshData() {
         profileVm.fetchUser()
         issuesVm.fetchIssues()
+        reposVm.fetchRepos()
     }
 }
 
@@ -96,7 +98,7 @@ private extension DashboardView {
             if let issues = issuesVm.issues, !issues.isEmpty {
                 VStack(alignment: .leading) {
                     SectionHeader(title: "Recent Issues", linkText: "See All") {
-                        IssuesListView(issues: issues)
+                        IssuesListView()
                     }
                     
                     VStack(spacing: 0) {

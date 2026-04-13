@@ -15,11 +15,7 @@ class RepositoriesViewModel: ObservableObject {
     
     private let repoService = ReposService()
     
-    func fetchUser() {
-        
-        if (repos != nil) {
-            return
-        }
+    func fetchRepos() {
         
         isLoading = true
         repoService.fetchRepos { [weak self] result in
