@@ -17,9 +17,9 @@ class ProfileViewModel: ObservableObject {
     
     func fetchUser() {
         
-        if (user != nil) {
-            return
-        }
+//        if (user != nil) {
+//            return
+//        }
         
         isLoading = true
         userService.fetchUser { [weak self] result in

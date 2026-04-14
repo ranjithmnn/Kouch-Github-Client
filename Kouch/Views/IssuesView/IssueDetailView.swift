@@ -10,40 +10,13 @@ import SwiftUI
 struct IssueDetailView: View {
     let issue: Issue
     @Environment(\.dismiss) var dismiss
+    @StateObject private var issuesVm = IssueViewModel()
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text(issue.repository?.full_name ?? "")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                        Text("#\(issue.number ?? 0)")
-                            .font(.caption)
-                            .monospacedDigit()
-                            .foregroundStyle(.tertiary)
-                    }
-                    
-                    // Main Title
-                    Text(issue.title ?? "No Title")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .fixedSize(horizontal: false, vertical: true)
-                    
-                    // Status Badge & Metadata
-                    HStack(spacing: 8) {
-                        StatusBadge(state: issue.state ?? "open")
-                        
-                        Text("opened by **\(issue.user?.login ?? "ghost")**")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .padding(.horizontal)
+                IssueDetailsHeader(issue: issue)
                 
                 Divider().padding(.horizontal)
                 
@@ -84,60 +57,47 @@ struct IssueDetailView: View {
                 }
                 .padding(.horizontal)
                 
+                if (!(issuesVm.comments?.isEmpty ?? true)) {
+                    Text("Comments")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                        .padding(.horizontal)
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(Array(issuesVm.comments ?? []), id: \.id) { comment in
+                            IssueCommentsTile(comment: comment)
+                        }
+                    }.padding(.horizontal)
+                }
+                
             }
             .padding(.vertical)
         }
         .navigationBarTitleDisplayMode(.inline)
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .toolbar {
-//            ToolbarItem(placement: .primaryAction) {
-//                Button { /* Action */ } label: {
-//                    Image(systemName: "sparkles")
-//                }
-//            }
-//            ToolbarSpacer(.fixed)
+            //            ToolbarItem(placement: .primaryAction) {
+            //                Button { /* Action */ } label: {
+            //                    Image(systemName: "sparkles")
+            //                }
+            //            }
+            //            ToolbarSpacer(.fixed)
             ToolbarItem(placement: .primaryAction) {
                 Button { /* Action */ } label: {
                     Image(systemName: "square.and.arrow.up")
                 }
             }
         }
+        .onAppear {
+            refreshData()
+        }
+    }
+    
+    func refreshData() {
+        issuesVm.fetchComments(repoName: issue.repository?.full_name, issueNumber: issue.number)
     }
 }
 
-struct StatusBadge: View {
-    let state: String
-    var isOpen: Bool { state.lowercased() == "open" }
-    
-    var body: some View {
-        HStack(spacing: 4) {
-            Image(systemName: isOpen ? "circle.circle" : "checkmark.circle.fill")
-            Text(state.capitalized)
-        }
-        .font(.caption)
-        .fontWeight(.bold)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(isOpen ? Color.green.opacity(0.15) : Color.purple.opacity(0.15))
-        .foregroundStyle(isOpen ? .green : .purple)
-        .clipShape(Capsule())
-    }
-}
 
-struct DetailStatView: View {
-    let icon: String
-    let value: String
-    let label: String
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(label).font(.caption2).foregroundStyle(.tertiary)
-            Label(value, systemImage: icon)
-                .font(.subheadline)
-                .fontWeight(.medium)
-        }
-    }
-}
 
 #Preview {
     DashboardView()

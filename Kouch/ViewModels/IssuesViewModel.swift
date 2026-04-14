@@ -10,25 +10,38 @@ import Combine
 
 class IssueViewModel: ObservableObject {
     @Published var issues: [Issue]?
-    @Published var isLoading = false
+    @Published var isIssuesLoading = false
+    @Published var comments: [Comment]?
+    @Published var isCommentsLoading = false
     @Published var error: String?
     
     private let issuesService = IssuesService()
     
     func fetchIssues() {
-        
-//        if (!(issues?.isEmpty ?? false)) {
-//            return
-//        }
-        
-        isLoading = true
+        isIssuesLoading = true
         issuesService.fetchIssues { [weak self] result in
             DispatchQueue.main.async {
-                self?.isLoading = false
+                self?.isIssuesLoading = false
                 
                 switch result {
                 case .success(let issues):
                     self?.issues = issues
+                case .failure(let error):
+                    self?.error = error.localizedDescription
+                }
+            }
+        }
+    }
+    
+    func fetchComments(repoName: String?, issueNumber: Int?) {
+        isCommentsLoading = true
+        issuesService.fetchIssueComments(repoName: repoName, issueNumber: issueNumber) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isIssuesLoading = false
+                
+                switch result {
+                case .success(let comments):
+                    self?.comments = comments
                 case .failure(let error):
                     self?.error = error.localizedDescription
                 }

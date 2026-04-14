@@ -13,7 +13,7 @@ struct IssuesListView: View {
     
     var body: some View {
         ScrollView {
-            if issuesVm.isLoading {
+            if issuesVm.isIssuesLoading {
                 ProgressView("Fetching Issues...")
             } else {
                 ForEach(issuesVm.issues ?? [], id: \.number) { issue in

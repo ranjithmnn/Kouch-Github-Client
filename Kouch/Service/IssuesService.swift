@@ -24,4 +24,43 @@ class IssuesService {
             }
         }
     }
+    
+    func fetchIssueDetails(repoName: String?, issueNumber: Int?, completion: @escaping (Result<[Comment], Error>) -> Void) {
+        if (repoName == nil) {return}
+        if (issueNumber == nil) {return}
+        let endpoint = APIEndpoint.issueComments(repo: repoName!, number: issueNumber!)
+        APINetworking().apiCall(endPoint: endpoint) { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let comments = try JSONDecoder().decode([Comment].self, from: data)
+                    completion(.success(comments))
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func fetchIssueComments(repoName: String?, issueNumber: Int?, completion: @escaping (Result<[Comment], Error>) -> Void) {
+        if (repoName == nil) {return}
+        if (issueNumber == nil) {return}
+        let endpoint = APIEndpoint.issueComments(repo: repoName!, number: issueNumber!)
+        APINetworking().apiCall(endPoint: endpoint) { result in
+            switch result {
+            case .success(let data):
+                do {
+                    // 2. Decode into a Comment model (not Issue)
+                    let comments = try JSONDecoder().decode([Comment].self, from: data)
+                    completion(.success(comments))
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }

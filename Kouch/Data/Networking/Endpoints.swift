@@ -10,13 +10,19 @@ import Foundation
 enum APIEndpoint {
     case user
     case issues
+    case issueComments(repo: String, number: Int)
     case userRepos
 
     var path: String {
         switch self {
-        case .user: return "/user"
-        case .issues: return "/issues"
-        case .userRepos: return "/user/repos"
+        case .user:
+            return "/user"
+        case .issues:
+            return "/issues"
+        case .issueComments(let repo, let number):
+            return "/repos/\(repo)/issues/\(number)/comments"
+        case .userRepos:
+            return "/user/repos"
         }
     }
 
@@ -34,7 +40,11 @@ enum APIEndpoint {
         request.httpMethod = method
         request.timeoutInterval = 10.0
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(Bundle.main.object(forInfoDictionaryKey: "GITHUB_API_KEY"),default: "")", forHTTPHeaderField: "Authorization")
+        
+        // Note: Ensure your API key is correctly fetched from Info.plist
+        let token = Bundle.main.object(forInfoDictionaryKey: "GITHUB_API_KEY") as? String ?? ""
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
         return request
     }
 }

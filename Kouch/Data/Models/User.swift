@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct User: Codable {
+struct User: Codable, Hashable {
     var login: String?
     var id: Int?
     var node_id: String?

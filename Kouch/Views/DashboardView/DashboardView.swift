@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 enum DashboardAction: String, Identifiable {
     case newIssue = "New Issue"
     case createPR = "Create Pull Request"
@@ -120,7 +119,7 @@ private extension DashboardView {
     
     var exploreSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Explore")
+            Text("Yours")
                 .font(.headline)
                 .padding(.leading)
             
