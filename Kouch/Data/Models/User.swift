@@ -5,25 +5,39 @@
 //  Created by Ranjith Menon on 06/04/2026.
 //
 
-import SwiftUI
+import Foundation
 
-struct User: Codable, Hashable {
-    var login: String?
-    var id: Int?
-    var node_id: String?
-    var avatar_url: String?
-    var followers_url: String?
-    var following_url: String?
-    var repos_url: String?
-    var name: String?
-    var company: String?
-    var location: String?
-    var bio: String?
-    var public_repos: Int?
-    var public_gists: Int?
-    var followers: Int?
-    var following: Int?
-    var created_at: String?
-    var total_private_repos: Int?
-    var owned_private_repos: Int?
+nonisolated struct User: Codable, Identifiable, Hashable, Sendable {
+    let id: Int
+    let login: String
+    let nodeId: String?
+    let avatarUrl: String?
+    let followersUrl: String?
+    let followingUrl: String?
+    let reposUrl: String?
+    let name: String?
+    let company: String?
+    let location: String?
+    let bio: String?
+    let publicRepos: Int?
+    let publicGists: Int?
+    let followers: Int?
+    let following: Int?
+    let createdAt: Date?
+    let totalPrivateRepos: Int?
+    let ownedPrivateRepos: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case id, login, name, company, location, bio, followers, following
+        case nodeId = "node_id"
+        case avatarUrl = "avatar_url"
+        case followersUrl = "followers_url"
+        case followingUrl = "following_url"
+        case reposUrl = "repos_url"
+        case publicRepos = "public_repos"
+        case publicGists = "public_gists"
+        case createdAt = "created_at"
+        case totalPrivateRepos = "total_private_repos"
+        case ownedPrivateRepos = "owned_private_repos"
+    }
 }

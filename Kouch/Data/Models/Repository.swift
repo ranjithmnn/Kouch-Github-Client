@@ -5,16 +5,25 @@
 //  Created by Ranjith Menon on 06/04/2026.
 //
 
-import SwiftUI
+import Foundation
 
-struct Repository: Codable {
-    let name: String?
-    let full_name: String?
+nonisolated struct Repository: Codable, Identifiable, Hashable, Sendable {
+    let id: Int
+    let name: String
+    let fullName: String
     let owner: User?
     let description: String?
     let language: String?
-    let stargazers_count: Int?
-    let forks_count: Int?
+    let stargazersCount: Int?
+    let forksCount: Int?
     let visibility: String?
-    let updated_at: String?
+    let updatedAt: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, owner, description, language, visibility
+        case fullName = "full_name"
+        case stargazersCount = "stargazers_count"
+        case forksCount = "forks_count"
+        case updatedAt = "updated_at"
+    }
 }

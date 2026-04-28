@@ -6,8 +6,23 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXCopyFilesBuildPhase section */
+		BDD693A72FA0C652000349FA /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		BD229B562F83872200343D2A /* Kouch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kouch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDD693942FA0C651000349FA /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		BDD693962FA0C651000349FA /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -46,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				BD229B582F83872200343D2A /* Kouch */,
+				BDD693932FA0C651000349FA /* Frameworks */,
 				BD229B572F83872200343D2A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -58,6 +74,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		BDD693932FA0C651000349FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BDD693942FA0C651000349FA /* WidgetKit.framework */,
+				BDD693962FA0C651000349FA /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -68,6 +93,7 @@
 				BD229B522F83872200343D2A /* Sources */,
 				BD229B532F83872200343D2A /* Frameworks */,
 				BD229B542F83872200343D2A /* Resources */,
+				BDD693A72FA0C652000349FA /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -270,6 +296,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Kouch/Kouch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PGD5MGD8MW;
@@ -305,6 +332,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Kouch/Kouch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PGD5MGD8MW;

@@ -5,28 +5,27 @@
 //  Created by Ranjith Menon on 07/04/2026.
 //
 
-
 import SwiftUI
 
 struct IssueTileView: View {
     let issue: Issue
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center) {
                 Image(systemName: issue.state == "open" ? "circle.circle" : "checkmark.circle.fill")
                     .foregroundColor(issue.state == "open" ? .green : .purple)
                     .font(.subheadline)
-                
-                Text(issue.repository?.full_name ?? "Unknown Repo")
+
+                Text(issue.repository?.fullName ?? "Unknown Repo")
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
-                
+
                 Spacer()
-                
-                Text("#\(issue.number ?? 0)")
+
+                Text("#\(issue.number)")
                     .font(.caption)
                     .monospacedDigit()
                     .foregroundStyle(.tertiary)
@@ -36,19 +35,19 @@ struct IssueTileView: View {
                 .fontWeight(.semibold)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
-            
+
             if let labels = issue.labels, !labels.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 4) {
-                        ForEach(labels, id: \.id) { label in
+                        ForEach(labels) { label in
                             CapsuleLabel(label: label)
                         }
                     }
                 }
             }
-            
+
             HStack(spacing: 12) {
-                AsyncImage(url: URL(string: issue.user?.avatar_url ?? "")) { image in
+                AsyncImage(url: URL(string: issue.user?.avatarUrl ?? "")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -58,71 +57,53 @@ struct IssueTileView: View {
                 .frame(width: 20, height: 20)
                 .clipShape(Circle())
                 .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 1.5))
-                
+
                 Text(issue.user?.login ?? "")
-                
+
                 // Comments
                 if let commentCount = issue.comments, commentCount > 0 {
                     Label("\(commentCount)", systemImage: "bubble.right")
                 }
-                
+
                 Spacer()
-                
+
                 // Assignees Stack
                 if let assignees = issue.assignees, !assignees.isEmpty {
                     AssigneeStack(assignees: assignees)
                 }
-                
-                Text(formatDate(issue.created_at))
+
+                if let createdAt = issue.createdAt {
+                    Text(createdAt.relativeFormatted)
+                }
             }
             .font(.caption2)
             .foregroundStyle(.secondary)
         }
         .padding()
         .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(12)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
-    }
-    
-    private func formatDate(_ dateStr: String?) -> String {
-        // 1. Ensure the string exists
-        guard let dateStr = dateStr else { return "" }
-        
-        // 2. Parse the ISO8601 String into a Date object
-        let strategy = Date.ISO8601FormatStyle()
-        guard let date = try? Date(dateStr, strategy: strategy) else {
-            return ""
-        }
-        
-        // 3. Format the Date into a relative string (e.g., "2 days ago")
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .abbreviated // Use .full for "2 days ago", .abbreviated for "2d ago"
-        
-        return formatter.localizedString(for: date, relativeTo: Date())
-    }
-}
-
-
-
-
-
-
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let r, g, b: UInt64
-        switch hex.count {
-        case 6: // RGB (24-bit)
-            (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (r, g, b) = (128, 128, 128)
-        }
-        self.init(.sRGB, red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255, opacity: 1)
     }
 }
 
 #Preview {
-    DashboardView()
+    IssueTileView(
+        issue: Issue(
+            id: 1,
+            user: nil,
+            title: "Example Issue Title",
+            number: 42,
+            labels: nil,
+            state: "open",
+            locked: false,
+            comments: 5,
+            createdAt: Date(),
+            updatedAt: nil,
+            closedAt: nil,
+            assignees: nil,
+            repository: nil,
+            body: nil
+        )
+    )
+    .padding()
 }

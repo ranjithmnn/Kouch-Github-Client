@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum APIEndpoint {
+nonisolated enum APIEndpoint {
     case user
     case issues
     case issueComments(repo: String, number: Int)
@@ -30,21 +30,44 @@ enum APIEndpoint {
         return "GET"
     }
 
-    var baseURL: String {
+    /// Query parameters appended to the URL.
+    var queryItems: [URLQueryItem]? {
+        switch self {
+        case .issues, .userRepos, .issueComments:
+            return [URLQueryItem(name: "per_page", value: "100")]
+        default:
+            return nil
+        }
+    }
+
+    private var baseURL: String {
         return "https://api.github.com"
     }
 
-    var urlRequest: URLRequest? {
-        guard let url = URL(string: baseURL + path) else { return nil }
+    /// Builds a fully configured `URLRequest` for this endpoint.
+    var urlRequest: URLRequest {
+        guard var components = URLComponents(string: baseURL + path) else {
+            preconditionFailure("Invalid URL for endpoint: \(baseURL + path)")
+        }
+
+        components.queryItems = queryItems
+
+        guard let url = components.url else {
+            preconditionFailure("Failed to construct URL from components: \(components)")
+        }
+
         var request = URLRequest(url: url)
         request.httpMethod = method
-        request.timeoutInterval = 10.0
+        request.timeoutInterval = 15.0
+        request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        // Note: Ensure your API key is correctly fetched from Info.plist
+
         let token = Bundle.main.object(forInfoDictionaryKey: "GITHUB_API_KEY") as? String ?? ""
+        if token.isEmpty {
+            assertionFailure("GITHUB_API_KEY is missing from Info.plist. Add it via Token.xcconfig.")
+        }
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
+
         return request
     }
 }

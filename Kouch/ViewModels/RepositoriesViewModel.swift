@@ -8,28 +8,27 @@
 import Foundation
 import Combine
 
+/// ViewModel for managing repository list data.
 class RepositoriesViewModel: ObservableObject {
-    @Published var repos: [Repository]?
+    @Published var repos: [Repository] = []
     @Published var isLoading = false
     @Published var error: String?
-    
-    private let repoService = ReposService()
-    
-    func fetchRepos() {
-        
+
+    private let repoService: ReposServiceProtocol
+
+    init(repoService: ReposServiceProtocol = ReposService()) {
+        self.repoService = repoService
+    }
+
+    func fetchRepos() async {
         isLoading = true
-        repoService.fetchRepos { [weak self] result in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                
-                switch result {
-                case .success(let repo):
-                    self?.repos = repo
-                    
-                case .failure(let error):
-                    self?.error = error.localizedDescription
-                }
-            }
+        error = nil
+        do {
+            let fetchedRepos = try await repoService.fetchRepos()
+            repos = fetchedRepos
+        } catch {
+            self.error = error.localizedDescription
         }
+        isLoading = false
     }
 }

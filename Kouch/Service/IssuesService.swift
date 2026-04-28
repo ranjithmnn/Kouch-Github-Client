@@ -7,60 +7,20 @@
 
 import Foundation
 
-class IssuesService {
-    func fetchIssues(completion: @escaping (Result<[Issue], Error>) -> Void) {
-        APINetworking().apiCall(endPoint: .issues) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let issues = try JSONDecoder().decode([Issue].self, from: data)
-                    completion(.success(issues))
-                } catch {
-                    completion(.failure(error))
-                }
+/// Handles all issue-related API calls.
+nonisolated struct IssuesService: IssuesServiceProtocol {
+    private let networking: APINetworking
 
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    init(networking: APINetworking = .shared) {
+        self.networking = networking
     }
-    
-    func fetchIssueDetails(repoName: String?, issueNumber: Int?, completion: @escaping (Result<[Comment], Error>) -> Void) {
-        if (repoName == nil) {return}
-        if (issueNumber == nil) {return}
-        let endpoint = APIEndpoint.issueComments(repo: repoName!, number: issueNumber!)
-        APINetworking().apiCall(endPoint: endpoint) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let comments = try JSONDecoder().decode([Comment].self, from: data)
-                    completion(.success(comments))
-                } catch {
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+
+    func fetchIssues() async throws -> [Issue] {
+        try await networking.fetch(.issues)
     }
-    
-    func fetchIssueComments(repoName: String?, issueNumber: Int?, completion: @escaping (Result<[Comment], Error>) -> Void) {
-        if (repoName == nil) {return}
-        if (issueNumber == nil) {return}
-        let endpoint = APIEndpoint.issueComments(repo: repoName!, number: issueNumber!)
-        APINetworking().apiCall(endPoint: endpoint) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    // 2. Decode into a Comment model (not Issue)
-                    let comments = try JSONDecoder().decode([Comment].self, from: data)
-                    completion(.success(comments))
-                } catch {
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+
+    func fetchIssueComments(repoName: String, issueNumber: Int) async throws -> [Comment] {
+        let endpoint = APIEndpoint.issueComments(repo: repoName, number: issueNumber)
+        return try await networking.fetch(endpoint)
     }
 }

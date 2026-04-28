@@ -7,21 +7,15 @@
 
 import Foundation
 
-class UserService {
-    func fetchUser(completion: @escaping (Result<User, Error>) -> Void) {
-        APINetworking().apiCall(endPoint: .user) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let user = try JSONDecoder().decode(User.self, from: data)
-                    completion(.success(user))
-                } catch {
-                    completion(.failure(error))
-                }
+/// Handles all user-related API calls.
+nonisolated struct UserService: UserServiceProtocol {
+    private let networking: APINetworking
 
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    init(networking: APINetworking = .shared) {
+        self.networking = networking
+    }
+
+    func fetchUser() async throws -> User {
+        try await networking.fetch(.user)
     }
 }
