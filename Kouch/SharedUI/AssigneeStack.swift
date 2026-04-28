@@ -11,9 +11,11 @@ import SwiftUI
 struct AssigneeStack: View {
     let assignees: [User]
     let limit = 3
+    
+    @State private var spacing: CGFloat = -8
 
     var body: some View {
-        HStack(spacing: -8) {
+        HStack(spacing: spacing) {
             ForEach(assignees.prefix(limit)) { user in
                 AsyncImage(url: URL(string: user.avatarUrl ?? "")) { image in
                     image
@@ -25,6 +27,15 @@ struct AssigneeStack: View {
                 .frame(width: 20, height: 20)
                 .clipShape(Circle())
                 .overlay(Circle().stroke(Color(.systemBackground), lineWidth: 1.5))
+                .onTapGesture {
+                    withAnimation {
+                        if spacing == -8 {
+                            spacing = 2
+                        } else {
+                            spacing = -8
+                        }
+                    }
+                }
             }
 
             if assignees.count > limit {
