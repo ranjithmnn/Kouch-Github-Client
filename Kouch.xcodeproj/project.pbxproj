@@ -6,6 +6,22 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BD74C0792FA1CB9E00D471E9 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDD693942FA0C651000349FA /* WidgetKit.framework */; };
+		BD74C07A2FA1CB9E00D471E9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDD693962FA0C651000349FA /* SwiftUI.framework */; };
+		BD74C0852FA1CB9E00D471E9 /* IssuesWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BD74C0782FA1CB9E00D471E9 /* IssuesWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BD74C0832FA1CB9E00D471E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BD229B4E2F83872200343D2A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BD74C0772FA1CB9E00D471E9;
+			remoteInfo = IssuesWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		BDD693A72FA0C652000349FA /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -13,6 +29,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				BD74C0852FA1CB9E00D471E9 /* IssuesWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -21,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		BD229B562F83872200343D2A /* Kouch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kouch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD74C0782FA1CB9E00D471E9 /* IssuesWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = IssuesWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD74C08A2FA1CBA400D471E9 /* IssuesWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IssuesWidgetExtension.entitlements; sourceTree = "<group>"; };
 		BDD693942FA0C651000349FA /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		BDD693962FA0C651000349FA /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -33,6 +52,13 @@
 			);
 			target = BD229B552F83872200343D2A /* Kouch */;
 		};
+		BD74C0892FA1CB9E00D471E9 /* Exceptions for "IssuesWidget" folder in "IssuesWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BD74C0772FA1CB9E00D471E9 /* IssuesWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -42,6 +68,14 @@
 				BD229B742F83890B00343D2A /* Exceptions for "Kouch" folder in "Kouch" target */,
 			);
 			path = Kouch;
+			sourceTree = "<group>";
+		};
+		BD74C07B2FA1CB9E00D471E9 /* IssuesWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BD74C0892FA1CB9E00D471E9 /* Exceptions for "IssuesWidget" folder in "IssuesWidgetExtension" target */,
+			);
+			path = IssuesWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -54,13 +88,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BD74C0752FA1CB9E00D471E9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD74C07A2FA1CB9E00D471E9 /* SwiftUI.framework in Frameworks */,
+				BD74C0792FA1CB9E00D471E9 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		BD229B4D2F83872200343D2A = {
 			isa = PBXGroup;
 			children = (
+				BD74C08A2FA1CBA400D471E9 /* IssuesWidgetExtension.entitlements */,
 				BD229B582F83872200343D2A /* Kouch */,
+				BD74C07B2FA1CB9E00D471E9 /* IssuesWidget */,
 				BDD693932FA0C651000349FA /* Frameworks */,
 				BD229B572F83872200343D2A /* Products */,
 			);
@@ -70,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				BD229B562F83872200343D2A /* Kouch.app */,
+				BD74C0782FA1CB9E00D471E9 /* IssuesWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,6 +144,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BD74C0842FA1CB9E00D471E9 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				BD229B582F83872200343D2A /* Kouch */,
@@ -108,6 +155,28 @@
 			productName = Kouch;
 			productReference = BD229B562F83872200343D2A /* Kouch.app */;
 			productType = "com.apple.product-type.application";
+		};
+		BD74C0772FA1CB9E00D471E9 /* IssuesWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD74C0882FA1CB9E00D471E9 /* Build configuration list for PBXNativeTarget "IssuesWidgetExtension" */;
+			buildPhases = (
+				BD74C0742FA1CB9E00D471E9 /* Sources */,
+				BD74C0752FA1CB9E00D471E9 /* Frameworks */,
+				BD74C0762FA1CB9E00D471E9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				BD74C07B2FA1CB9E00D471E9 /* IssuesWidget */,
+			);
+			name = IssuesWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = IssuesWidgetExtension;
+			productReference = BD74C0782FA1CB9E00D471E9 /* IssuesWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -121,6 +190,9 @@
 				TargetAttributes = {
 					BD229B552F83872200343D2A = {
 						CreatedOnToolsVersion = 26.4;
+					};
+					BD74C0772FA1CB9E00D471E9 = {
+						CreatedOnToolsVersion = 26.4.1;
 					};
 				};
 			};
@@ -139,12 +211,20 @@
 			projectRoot = "";
 			targets = (
 				BD229B552F83872200343D2A /* Kouch */,
+				BD74C0772FA1CB9E00D471E9 /* IssuesWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		BD229B542F83872200343D2A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD74C0762FA1CB9E00D471E9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -161,7 +241,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BD74C0742FA1CB9E00D471E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BD74C0842FA1CB9E00D471E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BD74C0772FA1CB9E00D471E9 /* IssuesWidgetExtension */;
+			targetProxy = BD74C0832FA1CB9E00D471E9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		BD229B5F2F83872300343D2A /* Debug */ = {
@@ -361,6 +456,68 @@
 			};
 			name = Release;
 		};
+		BD74C0862FA1CB9E00D471E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = IssuesWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PGD5MGD8MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = IssuesWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = IssuesWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.Kouch.IssuesWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BD74C0872FA1CB9E00D471E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = IssuesWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PGD5MGD8MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = IssuesWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = IssuesWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.Kouch.IssuesWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -378,6 +535,15 @@
 			buildConfigurations = (
 				BD229B622F83872300343D2A /* Debug */,
 				BD229B632F83872300343D2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BD74C0882FA1CB9E00D471E9 /* Build configuration list for PBXNativeTarget "IssuesWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD74C0862FA1CB9E00D471E9 /* Debug */,
+				BD74C0872FA1CB9E00D471E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
